@@ -1,0 +1,18 @@
+const express = require('express')
+const router = express.Router()
+const allSubGreddiiitController = require('../controllers/allSubGreddiiitController')
+const verifyJWT = require('../middleware/verifyJWT')
+
+router.use(verifyJWT)
+
+router.route('/')
+    .get(allSubGreddiiitController.getAllSubGreddiiits)
+
+router.route('/joinRequest')
+    .patch(allSubGreddiiitController.joinRequest)
+
+router.route('/leaveSub')
+    .patch(allSubGreddiiitController.leaveSub)
+
+
+module.exports = router
