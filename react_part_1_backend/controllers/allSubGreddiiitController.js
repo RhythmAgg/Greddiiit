@@ -1,5 +1,7 @@
 const User = require('../models/User')
 const SubGreddiiits = require('../models/SubGreddiiits')
+const Post = require('../models/Post')
+
 const bcrypt = require('bcrypt')
 const Followers_Following = require('../models/FollowersFollowing')
 
@@ -44,9 +46,54 @@ const leaveSub = async (req,res) => {
     res.json(result)
 }
 
+const subPosts = async (req,res) => {
+
+    const subname = req.body.subname
+
+    const logged_in = req.userName
+
+    const result = await SubGreddiiits.findOne({'name': subname}).lean().exec()
+
+
+    console.log(result.posts)
+
+    const sub_posts = await Promise.all((result.posts).map(async (element) =>  {
+        const temp = await Post.findById(element).lean().exec()
+        return temp;
+    }))
+    
+    console.log(sub_posts)
+    
+    res.json({sub_posts,logged_in})
+}
+
+const createPost = async (req,res) => {
+
+    console.log('first post')
+
+    const logged_in = req.userName
+
+    const posted_in = req.body.posted_in
+
+    const content = req.body.content
+
+    const result = await Post.create({posted_in,content,'posted_by':logged_in,'upvotes': 0,
+                    'downvotes': 0,'comments': []
+                })
+
+    const rs = await SubGreddiiits.findOneAndUpdate({'name': posted_in},{$push: {posts: result._id}}
+                ,{new: true}).lean().exec()
+            
+    
+    console.log(result)
+    res.json({result,logged_in})
+}
+
 
 module.exports = {
     getAllSubGreddiiits,
     joinRequest,
-    leaveSub
+    leaveSub,
+    subPosts,
+    createPost
 }

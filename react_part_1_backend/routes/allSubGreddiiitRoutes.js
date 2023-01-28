@@ -14,5 +14,11 @@ router.route('/joinRequest')
 router.route('/leaveSub')
     .patch(allSubGreddiiitController.leaveSub)
 
+router.route('/subPosts')
+    .post(allSubGreddiiitController.subPosts)
+
+router.route('/createPost')
+    .post(allSubGreddiiitController.createPost)
+
 
 module.exports = router
