@@ -30,6 +30,7 @@ const MySubGreddiiits = () => {
     const [tagsSub,setTagsSub] = useState('')
     const [bannedSub,setBannedSub] = useState('')
     const [nameTaken,setNameTaken] = useState('')
+    const [loader,setLoader] = useState(null)
 
     const navigate = useNavigate()
 
@@ -49,9 +50,11 @@ const MySubGreddiiits = () => {
                 )
                 setAllMySubGreddiiits(response.data.result)
                 setAuth(response.data.logged_in);
+                setLoader('done')
 
             }else{
                 setAuth(null);
+                setLoader('done')
             }
         })()
     },[])
@@ -109,7 +112,7 @@ const MySubGreddiiits = () => {
         navigate('/home')
     }
   return (
-    auth?(
+    (loader && auth)?(
         <div>
             <div className="header-dashboard p-4 text-center">
             <Link className="navbar-brand" to='/home'>
@@ -261,7 +264,9 @@ const MySubGreddiiits = () => {
         </div>
         
     </div>    
-    ):<Navigate to='/home' />
+    ):loader?
+    <Navigate to='/home' />
+    :<div>Loading ...</div>
   )
 }
 
