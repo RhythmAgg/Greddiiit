@@ -12,14 +12,12 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    upvotes: {
-        type: Number,
-        required: true
-    },
-    downvotes: {
-        type: Number,
-        required: true
-    },
+    upvotes: [{
+        type: String,
+    }],
+    downvotes: [{
+        type: String,
+    }],
     comments: [{
         content: {
             type: String

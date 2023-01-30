@@ -29,7 +29,11 @@ const userSchema = new mongoose.Schema({
     contact: {
         type: String,
         reguired: true
-    }
+    },
+    savedposts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post'
+    }]
 },{
     timestamps: true
 })

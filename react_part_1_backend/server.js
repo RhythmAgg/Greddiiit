@@ -33,6 +33,10 @@ app.use('/allSubGreddiiit', require('./routes/allSubGreddiiitRoutes'));
 
 app.use('/follo', require('./routes/folloRoutes'));
 
+app.use('/SubGreddiiitPage', require('./routes/SubGreddiiitPageRoutes'));
+
+
+
 app.use(express.urlencoded({extended:false}));
 
 

@@ -20,7 +20,7 @@ const registerNewUser = async (req, res) => {
     // Hash password 
     const hashedPwd = await bcrypt.hash(password, 10) // salt rounds
 
-    const userObject = {firstName,lastName,userName,email,age,"contact": contact.toString(),"password": hashedPwd}
+    const userObject = {firstName,lastName,userName,email,age,"contact": contact.toString(),"password": hashedPwd,'savedposts': []}
 
     // Create and store new user 
     const user = await User.create(userObject)

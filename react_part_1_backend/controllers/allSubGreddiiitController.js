@@ -55,8 +55,6 @@ const subPosts = async (req,res) => {
     const result = await SubGreddiiits.findOne({'name': subname}).lean().exec()
 
 
-    console.log(result.posts)
-
     const sub_posts = await Promise.all((result.posts).map(async (element) =>  {
         const temp = await Post.findById(element).lean().exec()
         return temp;
@@ -64,7 +62,7 @@ const subPosts = async (req,res) => {
     
     console.log(sub_posts)
     
-    res.json({sub_posts,logged_in})
+    res.json({result,sub_posts,logged_in})
 }
 
 const createPost = async (req,res) => {
@@ -77,8 +75,8 @@ const createPost = async (req,res) => {
 
     const content = req.body.content
 
-    const result = await Post.create({posted_in,content,'posted_by':logged_in,'upvotes': 0,
-                    'downvotes': 0,'comments': []
+    const result = await Post.create({posted_in,content,'posted_by':logged_in,'upvotes': [],
+                    'downvotes': [],'comments': []
                 })
 
     const rs = await SubGreddiiits.findOneAndUpdate({'name': posted_in},{$push: {posts: result._id}}
