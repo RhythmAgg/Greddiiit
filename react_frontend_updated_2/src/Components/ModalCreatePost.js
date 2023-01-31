@@ -1,18 +1,28 @@
 import React, { useState } from 'react'
 import axios from '../api/axios'
 
-const ModalCreatePost = ({sub,allPosts,setAllPosts}) => {
+const ModalCreatePost = ({sub,allPosts,setAllPosts,subdetails}) => {
     const [content,setContent] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('clicded')
+        const content_split = new Set((content.toLowerCase()).split(/[\s,]+/))
+        console.log(content_split)
+        const cont=[]
+        for(let i=0;i<(subdetails.bannedWords.length);i++)
+        {
+            if(content_split.has(subdetails.bannedWords[i]))
+            {
+                cont.push(subdetails.bannedWords[i])
+            }
+        }
+        if(cont.length > 0) alert(`the post contains ${cont} banned words`)
         try{
             const info = JSON.parse(localStorage.getItem('token'));
             if(info && info.accessToken)
             {
                 const response = await axios.post('/allSubGreddiiit/createPost', 
-                {'posted_in': sub,'content': content},
+                {'posted_in': sub,'content': content,'subdetails': subdetails},
                 {
                     headers: {
                         "Authorization": `Bearer ${info.accessToken}`,
@@ -21,6 +31,7 @@ const ModalCreatePost = ({sub,allPosts,setAllPosts}) => {
                 }
                 )
                 setAllPosts([...allPosts,response.data.result])
+                setContent('')
 
             }else{
 

@@ -6,18 +6,17 @@ import { Link } from 'react-router-dom';
 import Logo from '../img/reddit_logo.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReddit } from '@fortawesome/free-brands-svg-icons'
-import { faBars,faAnglesUp,faSignOut, faUsers, faSquarePlus, faSearch, faAnglesDown} from '@fortawesome/free-solid-svg-icons'
+import { faBars,faAnglesUp,faSignOut, faUsers, faSquarePlus, faSearch, faAnglesDown, faSave} from '@fortawesome/free-solid-svg-icons'
 import ModalEdit from './ModalEdit';
 import ModalFollowers from './ModalFollowers';
 import ModalFollowing from './ModalFollowing';
-import AccordionSubPosts from './AccordionSubPosts';
+import AccordionSavedPosts from './AccordionSavedPosts';
 import UserOffcanvas from './UserOffcanvas';
 import Footer from './Footer';
 import ModalCreatePost from './ModalCreatePost';
 import SubOffCanvas from './SubOffCanvas';
 
-const SubGreddiiitPage = () => {
-    const params = useParams()
+const SavedPosts = () => {
     const [followersdata,setFollowersData] = useState([])
     const [followingdata,setFollowingData] = useState([])
     const [allUsers,setAllUsers] = useState([])
@@ -49,8 +48,7 @@ const SubGreddiiitPage = () => {
             {
                 try{
                     console.log(info.accessToken)
-                    const response = await axios.post('/allSubGreddiiit/subPosts',
-                    {"subname": params.sub},
+                    const response = await axios.get('/user/savedposts',
                     {
                         "headers": {
                             "Authorization": `Bearer ${info.accessToken}`,
@@ -75,7 +73,7 @@ const SubGreddiiitPage = () => {
                     setFollowingData(x.data.following);
                     setAllPosts(response.data.sub_posts)
                     setAllSubGreddiiits(response.data.sub_posts)
-                    setSubDetails(response.data.result)
+                    setSubDetails(response.data.sub_posts)
                     console.log('welcome')
                     setAuth(response.data.logged_in);
                     setLoader('done')
@@ -99,43 +97,18 @@ const SubGreddiiitPage = () => {
   return ( 
     (loader && auth)?(
         <div className='row gx-0 '>
-        <ModalCreatePost 
-            sub={params.sub}
-            allPosts={allPosts}
-            setAllPosts={setAllPosts}
-            subdetails={subdetails}
-        />
         {profileView && <UserOffcanvas data={allUsers} profileView={profileView} 
                 followingdata={followingdata}
                 setFollowingData={setFollowingData}  
                 logged={auth}  
         />}
-        <SubOffCanvas subdetails={subdetails} />
+
         <div className='col-lg-3 d-none d-lg-flex order-1 bg-dark  flex-column' style={{'color': 'white','rowGap': '1rem'}}>
-            <img src={Logo} style={{'width': '100%','margin-bottom': '0'}} />
-            <h1 className='text-center mb-2 mt-0 bg-warning' style={{'color': 'black','wordBreak': 'break-all'}}>{subdetails.name}</h1>
-            <h4>Moderator: <span style={{'color': 'red'}}>{subdetails.moderator}</span></h4>
-            <h4>Description</h4>
-            <textarea className='bg-light mb-2 rounded p-1' rows='3' value={subdetails.description} disabled />
-            <div>
-            <h4 style={{'display': 'inline'}}>Tags:</h4>
-            {subdetails.tags.map(word => {
-                return(
-                <span class="badge rounded-pill bg-success m-1" style={{'fontSize': '1rem'}}>{word}</span>
-                )
-            })}
+            <h1 className='mt-5 text-center'>Saved Posts </h1>
+            <div className='flex-fill d-flex align-items-center justify-content-center'>
+            <FontAwesomeIcon icon={faReddit} style={{'fontSize': '10rem','color': 'orange'}} bounce/>
             </div>
-            <div>
-            <h4 style={{'display': 'inline'}}>Banned Words:</h4>
-            {subdetails.bannedWords.map(word => {
-                return(
-                <span class="badge rounded-pill bg-danger m-1" style={{'fontSize': '1rem'}}>{word}</span>
-                )
-            })}
-            </div>
-            <button type="button" className="btn btn-info ms-auto me-auto mt-2" style={{'width': '30%'}}>
-            Users <span className="badge bg-danger">{subdetails.followers.length}</span>
-            </button>
+            
         </div>
        
         <div className='col-lg-9 order-2' style={{'maxHeight': '100vh','overflowY': 'scroll'}}>
@@ -163,7 +136,7 @@ const SubGreddiiitPage = () => {
                         <Link className="nav-link" to="/AllSubGreddiiits">Sub Greddiiits</Link>
                         </li>
                         <li className="nav-item">
-                        <Link className="nav-link" to="/SavedPosts">Saved Posts</Link>
+                        <Link className="nav-link active" to="/SavedPosts">Saved Posts</Link>
                         </li>
                         </ul>
                         <div className='d-flex justify-content-end' style={{'flexGrow': '1','color': 'white'}}>
@@ -182,25 +155,18 @@ const SubGreddiiitPage = () => {
             <div className='col-lg-1'></div>
             <div className="col-lg-10 d-flex flex-fill flex-column followers flex-wrap" style={{'minHeight': '60vh'}}>
                 <div className='d-lg-none p-2'>
-                <FontAwesomeIcon icon={faBars} size='2x' data-bs-toggle='offcanvas'
-                    data-bs-target='#subDetails'    
+                <FontAwesomeIcon icon={faSave} size='2x'  
                 />
-                    <h3 className='m-2' style={{'display': 'inline'}} >Subgreddiiit Details</h3>
+                <h3 className='m-2' style={{'display': 'inline'}} >Saved Posts</h3>
                 </div>
                 <div className='d-flex flex-wrap'>
-                    <div className='d-flex align-items-center justify-content-center flex-fill flex-wrap p-3  rounded'>
-                    <FontAwesomeIcon icon={faSquarePlus} style={{'display': 'inline','cursor': 'pointer','color': 'green'}} 
-                    size='3x' data-bs-toggle='modal' data-bs-target='#myModal_createpost' 
-                />
-                
-                <h3 style={{'margin': '10px'}}>Create New Post</h3>
-                    </div>
+                    
                 </div>
                 <div className='flex-fill p-4 d-flex flex-column bg-light'>
                     
                     <div className='flex-fill bg-white all_users p-0' style={{'minHeight': '50vh'}} >
                     {allPosts && <div id="accordion">
-                        <AccordionSubPosts
+                        <AccordionSavedPosts
                             data={[...allPosts].reverse()}  
                             allSubGreddiiits={allSubGreddiiits} 
                             setAllSubGreddiiits={setAllSubGreddiiits}
@@ -209,7 +175,6 @@ const SubGreddiiitPage = () => {
                             setProfileView={setProfileView} 
                             setAllPosts={setAllPosts}
                             allPosts={allPosts}
-                            subdetails={subdetails}
                              />
                     </div>}
                     </div>
@@ -233,4 +198,4 @@ const SubGreddiiitPage = () => {
   )
 }
 
-export default SubGreddiiitPage
+export default SavedPosts

@@ -187,9 +187,15 @@ footer {
 .users_group > list-group-item {  
   background-color: transparent;
 }
-.user_button, .leave_button {
+.user_button, .leave_button, .unsave_button{
   border: 2px solid black;
 }
+.unsave_button:hover {
+  background-color: rgb(232, 10, 10);
+  color: white;
+  border: none;
+}
+
 .user_button:hover ,.follow_button:hover{
   background-color: rgb(50, 159, 20);
   color: white;

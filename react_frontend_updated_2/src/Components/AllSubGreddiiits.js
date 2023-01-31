@@ -143,16 +143,16 @@ const AllSubGreddiiits = () => {
                     <div className="collapse navbar-collapse" id="mynavbar">
                         <ul className="navbar-nav">
                         <li className="nav-item">
-                        <Link className="nav-link active" to="/">Profile Page</Link>
+                        <Link className="nav-link " to="/">Profile Page</Link>
                         </li>
                         <li className="nav-item">
                         <Link className="nav-link" to="/mySubGreddiiits">My Sub Greddiiits</Link>
                         </li>
                         <li className="nav-item">
-                        <Link className="nav-link" to="/AllSubGreddiiits">Sub Greddiiits</Link>
+                        <Link className="nav-link active" to="/AllSubGreddiiits">Sub Greddiiits</Link>
                         </li>
                         <li className="nav-item">
-                        <Link className="nav-link" to="/">Saved Posts</Link>
+                        <Link className="nav-link" to="/SavedPosts">Saved Posts</Link>
                         </li>
                         </ul>
                         <div className='d-flex justify-content-end' style={{'flexGrow': '1','color': 'white'}}>

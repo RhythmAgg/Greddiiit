@@ -1,13 +1,13 @@
 import React from 'react'
 import { useState, useEffect,useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash,faSave,faThumbsUp,faThumbsDown,faAnglesDown, faAnglesRight,faCommentAlt,faAnglesUp, faPersonWalkingArrowRight, faDoorOpen, faVoteYea} from '@fortawesome/free-solid-svg-icons'
+import { faTrashArrowUp,faTrash,faSave,faThumbsUp,faThumbsDown,faAnglesDown, faAnglesRight,faCommentAlt,faAnglesUp, faPersonWalkingArrowRight, faDoorOpen, faVoteYea} from '@fortawesome/free-solid-svg-icons'
 import axios from '../api/axios'
 import { Link, Navigate } from 'react-router-dom'
 import Missing from './Missing'
 import Comments from './Comments'
 
-const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfileView,profileView,auth,setAllPosts,allPosts,subdetails}) => {
+const AccordionSavedPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfileView,profileView,auth,setAllPosts,allPosts}) => {
     const [items,setItems] = useState([])
     const [changeIcon,setChangeIcon] = useState(null)
     const [mycomment,setMyComment] = useState('')
@@ -134,12 +134,12 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
             console.log(err)
         }  
     }
-    const savePost = async (post) => {
+    const unsavePost = async (post) => {
         try{
             const info = JSON.parse(localStorage.getItem('token'));
             if(info && info.accessToken)
             {
-                const response = await axios.patch('/SubGreddiiitPage/savepost', 
+                const response = await axios.patch('/SubGreddiiitPage/unsavepost', 
                 {'post_id': post._id},
                 {
                     headers: {
@@ -148,7 +148,8 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
                     }
                 }
                 )
-                alert('Post Saved')
+                alert('Post Un-Saved')
+                setAllPosts(allPosts.filter(pst => pst._id !== post._id))
             }else{
                 Navigate('/home')
             }
@@ -182,15 +183,11 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
                         </div>
                         <div className='post flex-fill p-2'>
                             <div className='d-flex flex-wrap'>
-                                {item.posted_by === subdetails.moderator?
-                                    <h3 className='m-2 flex-fill bg-warning rounded' style={{'color': 'red'}}>{item.posted_by}</h3>
-                                    :
-                                    <h3 className='m-2 flex-fill' style={{'color': 'red'}}>{item.posted_by}</h3>                                
-                                }
+                                <h3 className='m-2 flex-fill bg-warning rounded' style={{'color': 'red'}}>{item.posted_by}</h3>                           
                                 <div className='d-flex'>
-                                    <button type='button' className="btn btn-transparent user_button m-2" style={{'wordBreak': 'unset','fontSize': '1.2rem'}}
+                                    <button type='button' className="btn btn-transparent unsave_button m-2" style={{'wordBreak': 'unset','fontSize': '1.2rem'}}
                                     >
-                                    <FontAwesomeIcon icon={faSave} style={{'fontSize': '1.5rem'}} onClick={() => savePost(item)} />
+                                    <FontAwesomeIcon icon={faTrash} style={{'fontSize': '1.5rem'}} onClick={() => unsavePost(item)} />
                                     </button>
                                     <button type='button' className="btn btn-transparent user_button m-2" style={{'wordBreak': 'unset','fontSize': '1.2rem'}}
                                     data-bs-toggle="offcanvas" data-bs-target="#profile" onClick={(e) => setProfileView(item.posted_by)}
@@ -258,4 +255,4 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
   )
 }
 
-export default AccordionSubPosts
+export default AccordionSavedPosts
