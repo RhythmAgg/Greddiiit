@@ -18,6 +18,7 @@ const addComment = async (req,res) => {
 
     const post_id = req.body.post_id
 
+
     const result = await Post.findOneAndUpdate({'_id': post_id},
                     {$push : {comments: {content: req.body.content,commentor: logged_in}}},{new: true}).lean().exec()
     
@@ -34,6 +35,17 @@ const savepost = async (req,res) => {
 
     const result = await User.findOneAndUpdate({'_id': logged_id},
                     {$push: {'savedposts': post_id}},{new:true}).lean().exec()
+
+    res.json(result)
+}
+
+const unsavepost = async (req,res) => {
+    const logged_id = req.user_id
+
+    const post_id = req.body.post_id
+
+    const result = await User.findOneAndUpdate({'_id': logged_id},
+                    {$pull: {'savedposts': post_id}},{new:true}).lean().exec()
 
     res.json(result)
 }
@@ -76,5 +88,6 @@ module.exports = {
     addComment,
     downvote,
     upvote,
+    unsavepost,
     savepost
 }

@@ -73,9 +73,30 @@ const createPost = async (req,res) => {
 
     const posted_in = req.body.posted_in
 
-    const content = req.body.content
+    let comment = (req.body.content).split(' ')
 
-    const result = await Post.create({posted_in,content,'posted_by':logged_in,'upvotes': [],
+    console.log(comment)
+
+    const bannedWords = (req.body.subdetails).bannedWords
+
+    console.log(bannedWords)
+
+    for(let i=0;i<(bannedWords.length);i++)
+    {
+        for(let k=0;k<comment.length;k++){
+            var ele = (comment[k]).split(',')
+            for(let j=0;j<ele.length;j++)
+            {
+                if(ele[j].toLowerCase() === bannedWords[i].toLowerCase()) ele[j] = '*'
+            }
+            comment[k] = ele.join(',')
+            console.log(comment[k])
+        }
+    }
+
+    const final_content = comment.join(' ')
+
+    const result = await Post.create({posted_in,'content': final_content,'posted_by':logged_in,'upvotes': [],
                     'downvotes': [],'comments': []
                 })
 

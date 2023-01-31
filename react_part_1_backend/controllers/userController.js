@@ -1,4 +1,5 @@
 const User = require('../models/User')
+const Post = require('../models/Post')
 const bcrypt = require('bcrypt')
 
 
@@ -17,6 +18,22 @@ const getUserInfo = async (req, res) => {
     res.json(res_obj);
 
     // res.status(201).json({"userName": "ok"});
+}
+
+const savedposts = async (req,res) => {
+    const userName = req.userName
+
+    const user = await User.findOne({'userName':userName}).lean().exec()
+
+    console.log(user)
+    const sub_posts = await Promise.all((user.savedposts).map(async (element) =>  {
+        const temp = await Post.findById(element).lean().exec()
+        return temp;
+    }))
+
+    const res_obj = {user,sub_posts,'logged_in': userName}
+    res.json(res_obj)
+
 }
 
 const editUserInfo = async (req, res) => {
@@ -64,5 +81,6 @@ const editUserInfo = async (req, res) => {
 
 module.exports = {
     getUserInfo,
-    editUserInfo
+    editUserInfo,
+    savedposts
 }

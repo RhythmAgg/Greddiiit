@@ -9,4 +9,7 @@ router.route('/')
     .get(userController.getUserInfo)
     .patch(userController.editUserInfo)
 
+router.route('/savedposts')
+    .get(userController.savedposts)
+
 module.exports = router

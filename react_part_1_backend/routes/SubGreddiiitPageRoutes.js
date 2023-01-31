@@ -17,4 +17,7 @@ router.route('/downvote')
 router.route('/savepost')
     .patch(SubGreddiiitPageController.savepost)
 
+router.route('/unsavepost')
+    .patch(SubGreddiiitPageController.unsavepost)
+
 module.exports = router
