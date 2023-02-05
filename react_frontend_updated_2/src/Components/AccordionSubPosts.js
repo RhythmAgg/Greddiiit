@@ -7,7 +7,7 @@ import { Link, Navigate } from 'react-router-dom'
 import Missing from './Missing'
 import Comments from './Comments'
 
-const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfileView,profileView,auth,setAllPosts,allPosts,subdetails}) => {
+const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfileView,profileView,auth,setAllPosts,allPosts,subdetails,postReport,setPostReport}) => {
     const [items,setItems] = useState([])
     const [changeIcon,setChangeIcon] = useState(null)
     const [mycomment,setMyComment] = useState('')
@@ -184,8 +184,14 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
                             <div className='d-flex flex-wrap'>
                                 {item.posted_by === subdetails.moderator?
                                     <h3 className='m-2 flex-fill bg-warning rounded' style={{'color': 'red'}}>{item.posted_by}</h3>
-                                    :
-                                    <h3 className='m-2 flex-fill' style={{'color': 'red'}}>{item.posted_by}</h3>                                
+                                :subdetails.followers.find(here => {
+                                   return here.name === item.posted_by && here.status === 'unblocked'
+                                }) || subdetails.leftBefore.includes(item.posted_by)?
+                                <h3 className='m-2 flex-fill' style={{'color': 'red'}}>{item.posted_by}</h3>                                
+                                :subdetails.moderator === auth?
+                                <h3 className='m-2 flex-fill' style={{'color': 'red'}}>Blocked: {item.posted_by}</h3>
+                                :             
+                                <h3 className='m-2 flex-fill' style={{'color': 'red'}}>---Blocked User---</h3>                
                                 }
                                 <div className='d-flex'>
                                     <button type='button' className="btn btn-transparent user_button m-2" style={{'wordBreak': 'unset','fontSize': '1.2rem'}}
@@ -213,6 +219,9 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
                                 </div>
                                 <div className='flex-fill d-flex justify-content-end' style={{'columnGap': '0.5rem'}}>
                                     <button type='button' className='btn btn-danger '
+                                    data-bs-toggle='modal' data-bs-target='#myModal_report'
+                                    onClick={() => setPostReport(item)}
+                                    disabled={item.posted_by === auth || item.posted_by === subdetails.moderator?"disabled":""}
                                     >Report
                                     </button>
                                     <button type='button' className='btn btn-info '

@@ -3,8 +3,9 @@ import { useState, useEffect,useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash,faAnglesDown, faAnglesRight,faAnglesUp  } from '@fortawesome/free-solid-svg-icons'
 import axios from '../api/axios'
+import { Link } from 'react-router-dom'
 
-const AccordionSub = ({data,allMySubGreddiiits,setAllMySubGreddiiits}) => {
+const AccordionSub = ({data,allMySubGreddiiits,setAllMySubGreddiiits,auth}) => {
     const [items,setItems] = useState([])
     const [changeIcon,setChangeIcon] = useState(null)
     useEffect(() => {
@@ -72,10 +73,12 @@ const AccordionSub = ({data,allMySubGreddiiits,setAllMySubGreddiiits}) => {
                             Posts <span className="badge bg-danger">{item.posts.length}</span>
                             </button>
                             <div className=' d-flex justify-content-center'>
+                            <Link to={`/MySubGreddiiitPage/${item.name}/${auth}`}>
                             <button type='button' className="btn btn-transparent user_button m-2" style={{'wordBreak': 'unset'}}>
                             Profile
                             <FontAwesomeIcon icon={faAnglesRight} />
                             </button>
+                            </Link>
                             </div>
                         </div>
                         <h5 style={{'display': 'inline'}}>Tags: </h5>

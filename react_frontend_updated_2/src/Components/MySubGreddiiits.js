@@ -24,7 +24,7 @@ const MySubGreddiiits = () => {
     const [followers,setFollowers] = useState('');
     const [search,setSearch] = useState('')
     const [profileView,setProfileView] = useState(null)
-    const [showForm,setShowForm] = useState(null)
+    const [showForm,setShowForm] = useState('show')
     const [descSub,setDescSub] = useState('')
     const [nameSub,setNameSub] = useState('')
     const [tagsSub,setTagsSub] = useState('')
@@ -250,7 +250,7 @@ const MySubGreddiiits = () => {
                                 }  
                             allMySubGreddiiits={allMySubGreddiiits} 
                             setAllMySubGreddiiits={setAllMySubGreddiiits}
-                           
+                            auth={auth}
                              />
                     </div>}
                     </div>

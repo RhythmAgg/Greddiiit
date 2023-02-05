@@ -10,4 +10,20 @@ router.route('/')
     .get(mySubGreddiiitController.getSubGreddiiits)
     .delete(mySubGreddiiitController.deleteSubGreddiiit)
 
+router.route('/accept')
+    .patch(mySubGreddiiitController.acceptRequest)
+
+router.route('/reject')
+    .patch(mySubGreddiiitController.rejectRequest)
+
+router.route('/getReports')
+    .get(mySubGreddiiitController.getReports)
+
+router.route('/deleteReportPost')
+    .delete(mySubGreddiiitController.deleteReportPost)
+
+router.route('/blockUser')
+    .delete(mySubGreddiiitController.blockUser)
+
+
 module.exports = router

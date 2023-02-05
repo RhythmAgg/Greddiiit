@@ -5,6 +5,9 @@ const verifyJWT = require('../middleware/verifyJWT')
 
 router.use(verifyJWT)
 
+router.route('/report')
+    .post(SubGreddiiitPageController.report)
+
 router.route('/addComment')
     .post(SubGreddiiitPageController.addComment)
 
@@ -19,5 +22,7 @@ router.route('/savepost')
 
 router.route('/unsavepost')
     .patch(SubGreddiiitPageController.unsavepost)
+
+
 
 module.exports = router

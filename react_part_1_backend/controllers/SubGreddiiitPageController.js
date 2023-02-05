@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const SubGreddiiits = require('../models/SubGreddiiits')
 const Post = require('../models/Post')
+const Report = require('../models/Report')
 
 const bcrypt = require('bcrypt')
 const Followers_Following = require('../models/FollowersFollowing')
@@ -51,6 +52,7 @@ const unsavepost = async (req,res) => {
 }
 
 const upvote = async (req,res) => {
+    console.log('upvote')
 
     const post_id = req.body.post_id
 
@@ -81,7 +83,25 @@ const downvote = async (req,res) => {
     res.json(result)
 
 }
+const report = async (req,res) => {
+    const logged_in = req.userName
 
+    const reportObj = {
+        'concern': req.body.concern,
+        'reported_by': logged_in,
+        'reported_sub': req.body.reported_sub,
+        'reported_user': req.body.reported_user,
+        'reported_post': req.body.reported_post,
+        'reportText': req.body.reportText
+    }
+
+    console.log(reportObj)
+
+    const result = await Report.create(reportObj)
+
+    res.json(result)
+
+}
 
 
 module.exports = {
@@ -89,5 +109,6 @@ module.exports = {
     downvote,
     upvote,
     unsavepost,
+    report,
     savepost
 }

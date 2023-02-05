@@ -97,7 +97,7 @@ const createPost = async (req,res) => {
     const final_content = comment.join(' ')
 
     const result = await Post.create({posted_in,'content': final_content,'posted_by':logged_in,'upvotes': [],
-                    'downvotes': [],'comments': []
+                    'downvotes': [],'comments': [],'modStatus': 'unblocked'
                 })
 
     const rs = await SubGreddiiits.findOneAndUpdate({'name': posted_in},{$push: {posts: result._id}}

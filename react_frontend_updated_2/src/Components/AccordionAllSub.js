@@ -151,15 +151,30 @@ const AccordionAllSub = ({data,allSubGreddiiits,setAllSubGreddiiits,original,set
                             <button type="button" className="btn btn-info m-2">
                             Posts <span className="badge bg-danger">{item.posts.length}</span>
                             </button>
-                            <div className='d-flex justify-content-center'>
-                            <Link to={`/SubGreddiiitPage/${item.name}/${auth}`}>
-                            <button type='button' className="btn btn-transparent user_button m-2" style={{'wordBreak': 'unset'}}>
-                            Profile
-                            <FontAwesomeIcon icon={faAnglesRight} />
-                            </button>
-                            </Link>
+                            {item.followers.some(x => x.name === auth)
+                            ?(
+                                <div className='d-flex justify-content-center'>
+                                <Link to={`/SubGreddiiitPage/${item.name}/${auth}`} target='_blank'>
+                                <button type='button' className="btn btn-transparent user_button m-2" style={{'wordBreak': 'unset'}}
+                                >
+                                Profile
+                                <FontAwesomeIcon icon={faAnglesRight} />
+                                </button>
+                                </Link>
+                                </div>
+                            )
+                            :(
+                                <div className='d-flex justify-content-center'>
+                                <button type='button' className="btn btn-transparent user_button m-2" style={{'wordBreak': 'unset'}}
+                                disabled
+                                >
+                                Follow First
+                                <FontAwesomeIcon icon={faAnglesRight} />
+                                </button>
+                                </div>
+                            )
+                            }
                             
-                            </div>
                         </div>
                         <h5 style={{'display': 'inline'}}>Tags: </h5>
                         {item.tags.map(word => {

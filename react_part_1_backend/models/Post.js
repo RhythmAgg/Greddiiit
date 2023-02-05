@@ -8,6 +8,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    modStatus: {
+        type: String,
+        required: true
+    },
     posted_in: {
         type: String,
         required: true,

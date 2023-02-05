@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Logo from '../img/reddit_logo.jpg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReddit } from '@fortawesome/free-brands-svg-icons'
-import { faBars,faAnglesUp,faSignOut, faUsers, faSquarePlus, faSearch, faAnglesDown} from '@fortawesome/free-solid-svg-icons'
+import { faBars,faAnglesUp,faSignOut, faUsers, faSquarePlus, faSearch, faAnglesRight, faAnglesDown} from '@fortawesome/free-solid-svg-icons'
 import ModalEdit from './ModalEdit';
 import ModalFollowers from './ModalFollowers';
 import ModalFollowing from './ModalFollowing';
@@ -15,9 +15,11 @@ import UserOffcanvas from './UserOffcanvas';
 import Footer from './Footer';
 import ModalCreatePost from './ModalCreatePost';
 import SubOffCanvas from './SubOffCanvas';
-import ModalReport from './ModalReport';
+import Users from './MySubPage/Users';
+import JoiningRequests from './MySubPage/JoiningRequests';
+import Reports from './MySubPage/Reports';
 
-const SubGreddiiitPage = () => {
+const MySubGreddiiitPage = () => {
     const params = useParams()
     const [followersdata,setFollowersData] = useState([])
     const [followingdata,setFollowingData] = useState([])
@@ -25,15 +27,15 @@ const SubGreddiiitPage = () => {
     const [auth,setAuth] = useState({});
     const [allSubGreddiiits, setAllSubGreddiiits] = useState([])
     const [search,setSearch] = useState('')
-    const [sort,setSort] = useState([])
-    const [tags,setTags] = useState('')
-    const [original,setOriginal] = useState([])
+    const [reports,setReports] = useState([])
+    const [request,setRequest] = useState([])
     const [subdetails,setSubDetails] = useState({})
-    const [postReport,setPostReport] = useState(null)
 
     const [allPosts, setAllPosts] = useState([])
 
     const [profileView,setProfileView] = useState(null)
+
+    const [nav,setNav] = useState('users')
 
     const [loader,setLoader] = useState(null)
    
@@ -72,18 +74,28 @@ const SubGreddiiitPage = () => {
                         }
                     }
                     )
+                    const rep = await axios.get('/mySubGreddiiit/getReports',{
+                        params: {
+                            sub: `${params.sub}`
+                        },
+                        "headers": {
+                            "Authorization": `Bearer ${info.accessToken}`  
+                        },
+                        
+                    }
+                    )
+                    setReports(rep.data.reports)
                     setAllUsers(response_.data.user)
                     setFollowersData(x.data.followers);
                     setFollowingData(x.data.following);
                     setAllPosts(response.data.sub_posts)
                     setAllSubGreddiiits(response.data.sub_posts)
                     setSubDetails(response.data.result)
+                    setRequest((response_.data.user).filter(element => {
+                        return (((response.data.result).requests).includes(element.userName))
+                    }))
                     console.log('welcome')
                     setAuth(response.data.logged_in);
-                    if(!response.data.result.followers.some(c => c.name === response.data.logged_in))
-                    {
-                        navigate('/AllSubGreddiiits')
-                    }
                     setLoader('done')
                     }catch(err){
                         console.log(err)
@@ -105,20 +117,7 @@ const SubGreddiiitPage = () => {
   return ( 
     (loader && auth)?(
         <div className='row gx-0 '>
-        <ModalCreatePost 
-            sub={params.sub}
-            allPosts={allPosts}
-            setAllPosts={setAllPosts}
-            subdetails={subdetails}
-        />
-        {postReport &&<ModalReport 
-            sub={params.sub}
-            allPosts={allPosts}
-            setAllPosts={setAllPosts}
-            subdetails={subdetails}
-            item={postReport}
-        />
-        }
+        
         {profileView && <UserOffcanvas data={allUsers} profileView={profileView} 
                 followingdata={followingdata}
                 setFollowingData={setFollowingData}  
@@ -127,7 +126,12 @@ const SubGreddiiitPage = () => {
         <SubOffCanvas subdetails={subdetails} />
         <div className='col-lg-3 d-none d-lg-flex order-1 bg-dark  flex-column' style={{'color': 'white','rowGap': '1rem'}}>
             <img src={Logo} style={{'width': '100%','margin-bottom': '0'}} />
-            <h1 className='text-center mb-2 mt-0 bg-warning' style={{'color': 'black','wordBreak': 'break-all'}}>{subdetails.name}</h1>
+            <h1 className='text-center mb-2 mt-0 bg-warning' style={{'color': 'black','wordBreak': 'break-all','cursor': 'pointer'}}
+            data-bs-toggle='collapse' data-bs-target='#collapse_details'
+            ><FontAwesomeIcon icon={faAnglesDown} />
+            {subdetails.name}</h1>
+            <div className='collapse' id='collapse_details'>
+            <div className='d-flex flex-column' style={{'color': 'white','rowGap': '1rem'}}>
             <h4>Moderator: <span style={{'color': 'red'}}>{subdetails.moderator}</span></h4>
             <h4>Description</h4>
             <textarea className='bg-light mb-2 rounded p-1' rows='3' value={subdetails.description} disabled />
@@ -150,6 +154,26 @@ const SubGreddiiitPage = () => {
             <button type="button" className="btn btn-info ms-auto me-auto mt-2" style={{'width': '30%'}}>
             Users <span className="badge bg-danger">{subdetails.followers.length}</span>
             </button>
+            </div>
+            </div>
+            <div className="list-group list-group-flush">
+            <button type="button" className="ok list-group-item bg-dark mb-3 text-center" style={{'color': 'white','borderBottom': '1px solid white'}} 
+            onClick={() => setNav('users')}
+            >Users<FontAwesomeIcon icon={faAnglesRight} />
+            </button>
+            <button type="button" className="list-group-item bg-dark mb-3 list-group-item-action text-center" style={{'color': 'white','borderBottom': '1px solid white'}}
+            onClick={() => setNav('Join')}
+            >Join Requests<FontAwesomeIcon icon={faAnglesRight} />
+            </button>
+            <button type="button" className="list-group-item bg-dark mb-3 list-group-item-action text-center" style={{'color': 'white','borderBottom': '1px solid white'}}
+            onClick={() => setNav('stats')}
+            >Stats<FontAwesomeIcon icon={faAnglesRight} />
+            </button>
+            <button type="button" className="list-group-item bg-dark mb-3 list-group-item-action text-center" style={{'color': 'white','borderBottom': '1px solid white'}}
+            onClick={() => setNav('reports')}
+            >Reports<FontAwesomeIcon icon={faAnglesRight} />
+            </button>
+            </div>
         </div>
        
         <div className='col-lg-9 order-2' style={{'maxHeight': '100vh','overflowY': 'scroll'}}>
@@ -192,55 +216,48 @@ const SubGreddiiitPage = () => {
             </nav>
         
         <div className="d-flex" >
-            <div className="row flex-fill gx-0" >
-            <div className='col-lg-1'></div>
-            <div className="col-lg-10 d-flex flex-fill flex-column followers flex-wrap" style={{'minHeight': '60vh'}}>
-                <div className='d-lg-none p-2'>
-                <FontAwesomeIcon icon={faBars} size='2x' data-bs-toggle='offcanvas'
-                    data-bs-target='#subDetails'    
+            <div className="flex-fill d-flex justify-content-center" >
+            <div className="d-flex flex-fill flex-column followers flex-wrap" style={{'minHeight': '60vh'}}>
+                {nav === 'users' && <Users 
+                    search={search}
+                    setSearch={setSearch}
+                    allUsers={allUsers.filter(x => {
+                     return (subdetails.followers).some(y => y.name === x.userName)
+                    })}
+                    profileView={profileView}
+                    setProfileView={setProfileView}
+                    subdetails={subdetails}
+                    setSubDetails={setSubDetails}
                 />
-                    <h3 className='m-2' style={{'display': 'inline'}} >Subgreddiiit Details</h3>
-                </div>
-                <div className='d-flex flex-wrap'>
-                    {subdetails.followers.find(here => here.name === auth)
-                    ?(
-                    <div className='d-flex align-items-center justify-content-center flex-fill flex-wrap p-3  rounded'>
-                        <FontAwesomeIcon icon={faSquarePlus} style={{'display': 'inline','cursor': 'pointer','color': 'green'}} 
-                        size='3x' data-bs-toggle='modal' data-bs-target='#myModal_createpost' 
-                        />
-                        <h3 style={{'margin': '10px'}}>Create New Post</h3>
-                    </div>
-                    )
-                    :<h3 className='text-center flex-fill' style={{'margin': '10px'}}>!Follow First for posting!</h3>
-                    }
-                </div>
-                <div className='flex-fill p-4 d-flex flex-column bg-light'>
-                    
-                    <div className='flex-fill bg-white all_users p-0' style={{'minHeight': '50vh'}} >
-                    {allPosts && <div id="accordion">
-                        <AccordionSubPosts
-                            data={[...allPosts].reverse()}  
-                            allSubGreddiiits={allSubGreddiiits} 
-                            setAllSubGreddiiits={setAllSubGreddiiits}
-                            auth={auth}
-                            profileView={profileView}
-                            setProfileView={setProfileView} 
-                            setAllPosts={setAllPosts}
-                            allPosts={allPosts}
-                            subdetails={subdetails}
-                            postReport={postReport}
-                            setPostReport={setPostReport}
-                             />
-                    </div>}
-                    </div>
-                </div>
+                }
+                {nav === 'Join' && 
+                <JoiningRequests
+                    search={search}
+                    setSearch={setSearch}
+                    allUsers={request}
+                    setAllUsers={setRequest}
+                    profileView={profileView}
+                    setProfileView={setProfileView}
+                    subdetails={subdetails}
+                    setSubDetails={setSubDetails}
+                />
+                }
+                {nav == 'reports' && 
+                <Reports 
+                    reports={reports}
+                    setReports={setReports}
+                    subdetails={subdetails}
+                    setSubDetails={setSubDetails}
+                
+                />
+
+                }
             </div>
-            <div className='col-lg-1'></div>
 
             </div>
         </div>
         
-        <div className="mt-5 p-2 bg-dark text-white text-center">
+        <div className="mt-5 p-2 bg-dark text-white text-center" >
             <p>Made with <span className='hearts'>&#10084;</span> by Rhythm</p>
         </div>
         
@@ -253,4 +270,4 @@ const SubGreddiiitPage = () => {
   )
 }
 
-export default SubGreddiiitPage
+export default MySubGreddiiitPage

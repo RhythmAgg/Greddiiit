@@ -255,3 +255,26 @@ footer {
 .comment_list {
   border-bottom:1px solid black;
 }
+
+.reports-container {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 30px;
+  text-align: center;
+ 
+}
+
+.flex-item-left {
+  background-color: #f1f1f1;
+  padding: 10px;
+  flex: 45%;
+  margin: 1rem;
+  min-height: 40vh;
+
+}
+
+@media (max-width: 800px) {
+  .flex-item-left {
+    flex: 100%;
+  }
+}

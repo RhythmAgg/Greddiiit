@@ -5,6 +5,7 @@ import Dashboard from './Components/Dashboard';
 import MySubGreddiiits from './Components/MySubGreddiiits';
 import AllSubGreddiiits from './Components/AllSubGreddiiits';
 import SubGreddiiitPage from './Components/SubGreddiiitPage';
+import MySubGreddiiitPage from './Components/MySubGreddiiitPage';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import SavedPosts from './Components/SavedPosts';
@@ -18,6 +19,7 @@ function App() {
         <Route path='mySubGreddiiits' element={<MySubGreddiiits />} />
         <Route path='AllSubGreddiiits' element={<AllSubGreddiiits />} />
         <Route path='SubGreddiiitPage/:sub/:logged_in' element={<SubGreddiiitPage />} />
+        <Route path='MySubGreddiiitPage/:sub/:logged_in' element={<MySubGreddiiitPage />} />
         <Route path='SavedPosts' element={<SavedPosts />} />
         <Route path="*" element={<Missing />} />
       </Route>

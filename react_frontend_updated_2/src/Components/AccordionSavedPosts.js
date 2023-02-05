@@ -162,6 +162,7 @@ const AccordionSavedPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfi
   return (
     <>
     {items.map(item => {
+            if(item === null) return <div></div>
         // if(item != 'admin'){
             count = (Number(count) + 1).toString()
             const x = 'C'+count
@@ -182,6 +183,7 @@ const AccordionSavedPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfi
                             />
                         </div>
                         <div className='post flex-fill p-2'>
+                            <p className='mb-0' style={{'fontStyle': 'italic'}}>Posted In: <span style={{'color': 'red','fontSize': '1.2rem'}}>{item.posted_in}</span></p>
                             <div className='d-flex flex-wrap'>
                                 <h3 className='m-2 flex-fill bg-warning rounded' style={{'color': 'red'}}>{item.posted_by}</h3>                           
                                 <div className='d-flex'>
@@ -209,9 +211,7 @@ const AccordionSavedPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfi
                                     <span className="badge bg-danger">{item.downvotes.length >0?item.downvotes.length:0}</span>
                                 </div>
                                 <div className='flex-fill d-flex justify-content-end' style={{'columnGap': '0.5rem'}}>
-                                    <button type='button' className='btn btn-danger '
-                                    >Report
-                                    </button>
+                                    
                                     <button type='button' className='btn btn-info '
                                     data-bs-toggle='collapse' data-bs-target={y}
                                     >
