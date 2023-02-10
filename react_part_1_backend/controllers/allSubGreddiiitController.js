@@ -102,17 +102,72 @@ const createPost = async (req,res) => {
 
     const rs = await SubGreddiiits.findOneAndUpdate({'name': posted_in},{$push: {posts: result._id}}
                 ,{new: true}).lean().exec()
-            
+    
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year}`;
+    console.log(currentDate); // "17-6-2022"
+
+    const analytics = await SubGreddiiits.findOne({'name': posted_in,'analytics': {$elemMatch:  {date: currentDate}}}).lean().exec()
+
+    console.log(analytics)
+    if(!analytics){
+        const create_analytics = await SubGreddiiits.findOneAndUpdate({'name': posted_in},
+                                {$push: {analytics: {date: currentDate,newmembers: [],newposts: [result._id],visitors: 0}}},{new: true}).lean().exec()
+        
+        console.log(create_analytics)
+    }
+    else{
+        const update_analytics = await SubGreddiiits.findOneAndUpdate({'name': posted_in,'analytics': {$elemMatch:  {date: currentDate}}},
+                                {$push: {'analytics.$.newposts': result._id}},{new:true}).lean().exec()
+        console.log('to update')
+        console.log(update_analytics)
+    }
     
     console.log(result)
     res.json({result,logged_in})
 }
 
+const newvisitor = async (req,res) => {
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year}`;
+
+    const analytics = await SubGreddiiits.findOne({'name': req.body.sub,'analytics': {$elemMatch:  {date: currentDate}}}).lean().exec()
+
+    console.log(analytics)
+    if(!analytics){
+        const create_analytics = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub},
+                                {$push: {analytics: {date: currentDate,newmembers: [],newposts: [],visitors: 1}}},{new: true}).lean().exec()
+        
+        console.log(create_analytics)
+    }
+    else{
+        const update_analytics = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub,'analytics': {$elemMatch:  {date: currentDate}}},
+                                {$inc: {'analytics.$.visitors': 1}},{new:true}).lean().exec()
+        console.log('to update')
+        console.log(update_analytics)
+    }
+
+    res.json({'message': 'ok'})
+
+}
 
 module.exports = {
     getAllSubGreddiiits,
     joinRequest,
     leaveSub,
     subPosts,
-    createPost
+    createPost,
+    newvisitor
 }

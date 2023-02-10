@@ -72,6 +72,15 @@ const SubGreddiiitPage = () => {
                         }
                     }
                     )
+                    const analytics = await axios.post('allSubGreddiiit/newvisitor',
+                    {"sub": params.sub},
+                    {
+                        "headers": {
+                            "Authorization": `Bearer ${info.accessToken}`,
+                            "Content-type": "application/json"
+                        }
+                    }
+                    )
                     setAllUsers(response_.data.user)
                     setFollowersData(x.data.followers);
                     setFollowingData(x.data.following);

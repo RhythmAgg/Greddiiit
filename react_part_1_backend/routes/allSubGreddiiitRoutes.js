@@ -20,5 +20,8 @@ router.route('/subPosts')
 router.route('/createPost')
     .post(allSubGreddiiitController.createPost)
 
+router.route('/newvisitor')
+    .post(allSubGreddiiitController.newvisitor)
+
 
 module.exports = router

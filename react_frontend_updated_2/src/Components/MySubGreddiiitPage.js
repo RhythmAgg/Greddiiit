@@ -14,10 +14,11 @@ import AccordionSubPosts from './AccordionSubPosts';
 import UserOffcanvas from './UserOffcanvas';
 import Footer from './Footer';
 import ModalCreatePost from './ModalCreatePost';
-import SubOffCanvas from './SubOffCanvas';
+import MySubOffCanvas from './MySubOffCanvas';
 import Users from './MySubPage/Users';
 import JoiningRequests from './MySubPage/JoiningRequests';
 import Reports from './MySubPage/Reports';
+import Stats from './MySubPage/Stats';
 
 const MySubGreddiiitPage = () => {
     const params = useParams()
@@ -123,7 +124,7 @@ const MySubGreddiiitPage = () => {
                 setFollowingData={setFollowingData}  
                 logged={auth}  
         />}
-        <SubOffCanvas subdetails={subdetails} />
+        <MySubOffCanvas subdetails={subdetails} setNav={setNav} />
         <div className='col-lg-3 d-none d-lg-flex order-1 bg-dark  flex-column' style={{'color': 'white','rowGap': '1rem'}}>
             <img src={Logo} style={{'width': '100%','margin-bottom': '0'}} />
             <h1 className='text-center mb-2 mt-0 bg-warning' style={{'color': 'black','wordBreak': 'break-all','cursor': 'pointer'}}
@@ -175,7 +176,6 @@ const MySubGreddiiitPage = () => {
             </button>
             </div>
         </div>
-       
         <div className='col-lg-9 order-2' style={{'maxHeight': '100vh','overflowY': 'scroll'}}>
             <div className="header-dashboard p-4 text-center">
             <Link className="navbar-brand" to='/home'>
@@ -216,13 +216,22 @@ const MySubGreddiiitPage = () => {
             </nav>
         
         <div className="d-flex" >
-            <div className="flex-fill d-flex justify-content-center" >
+            <div className="flex-fill d-flex flex-column justify-content-center" >
+            <div className='d-lg-none p-2 '>
+                <FontAwesomeIcon icon={faBars} size='2x' data-bs-toggle='offcanvas'
+                    data-bs-target='#subDetails'    
+                />
+                    <h3 className='m-2' style={{'display': 'inline'}} >Subgreddiiit Details</h3>
+            </div>
             <div className="d-flex flex-fill flex-column followers flex-wrap" style={{'minHeight': '60vh'}}>
                 {nav === 'users' && <Users 
                     search={search}
                     setSearch={setSearch}
                     allUsers={allUsers.filter(x => {
                      return (subdetails.followers).some(y => y.name === x.userName)
+                    })}
+                    blocked={allUsers.filter(x => {
+                        return (subdetails.blocked).includes(x.userName)
                     })}
                     profileView={profileView}
                     setProfileView={setProfileView}
@@ -250,7 +259,13 @@ const MySubGreddiiitPage = () => {
                     setSubDetails={setSubDetails}
                 
                 />
-
+                }
+                {nav == 'stats' && 
+                <Stats
+                    subdetails={subdetails}
+                    setSubDetails={setSubDetails}
+                
+                />
                 }
             </div>
 

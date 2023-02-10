@@ -99,6 +99,9 @@ const report = async (req,res) => {
 
     const result = await Report.create(reportObj)
 
+    const xxx = await SubGreddiiits.findOneAndUpdate({'name': req.body.reported_sub},
+                    {$inc: {report_count: 1}},{new:true,upsert: true}).lean().exec()
+
     res.json(result)
 
 }

@@ -34,13 +34,37 @@ const subgreddiiitsSchema = new mongoose.Schema({
     leftBefore: [{
         type: String
     }],
+    blocked: [{
+        type: String
+    }],
     requests: [{
         type: String
     }],
     posts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post'
-    }]
+    }],
+    analytics: [{
+        date: {
+            type: String
+        },
+        newmembers: [{
+            type: String
+        }],
+        newposts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Post'
+        }],
+        visitors: {
+            type: Number
+        }
+    }],
+    report_count:{
+        type: Number
+    },
+    deletedpost_count:{
+        type: Number
+    }
 },{
     timestamps: true
 })

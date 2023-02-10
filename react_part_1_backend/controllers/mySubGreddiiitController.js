@@ -28,7 +28,9 @@ const createSubGreddiiit = async (req, res) => {
         'bannedWords': bannedSub.split(',').filter(item => item !== ''),
         'followers': [{'name': req.userName,'name_id': req.user_id,'status': 'unblocked'}],
         'requests': [],
-        'posts': []
+        'blocked': [],
+        'posts': [],
+        'analytics': []
     }
 
     
@@ -81,6 +83,31 @@ const acceptRequest = async (req,res) => {
 
     console.log(result)
 
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    
+    // This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${day}-${month}-${year}`;
+
+    const analytics = await SubGreddiiits.findOne({'name': req.body.sub,'analytics': {$elemMatch:  {date: currentDate}}}).lean().exec()
+
+    console.log(analytics)
+    if(!analytics){
+        const create_analytics = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub},
+                                {$push: {analytics: {date: currentDate,newmembers: [req.body.requesting],newposts: [],visitors: 0}}},{new: true}).lean().exec()
+        
+        console.log(create_analytics)
+    }
+    else{
+        const update_analytics = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub,'analytics': {$elemMatch:  {date: currentDate}}},
+                                {$push: {'analytics.$.newmembers': req.body.requesting}},{new:true}).lean().exec()
+        console.log('to update')
+        console.log(update_analytics)
+    }
+
     res.json({result,'logged_in': req.userName})
 }
 const rejectRequest = async (req,res) => {
@@ -124,7 +151,8 @@ const deleteReportPost = async (req,res) => {
     const result_ = await Post.deleteOne({'_id': req.body.delete_post_id}).lean().exec()
     const result__ = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub_posted_in},
     {$pull : {posts: req.body.delete_post_id}}).lean().exec()
-
+    const result___ = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub_posted_in},
+    {$inc : {deletedpost_count: 1}},{new:true,upsert:true}).lean().exec()
 
     console.log(result)
 
@@ -135,6 +163,9 @@ const blockUser = async (req,res) => {
 
     const result = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub},
                 {$pull : {followers: {name: req.body.blockUser}}},{new: true}).lean().exec()
+
+    const resul = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub},
+                {$push : {blocked: req.body.blockUser}},{new: true,upsert:true}).lean().exec()
 
     const result_ = await Report.deleteOne({'_id': req.body.delete_report_id}).lean().exec()
 
