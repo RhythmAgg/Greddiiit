@@ -85,6 +85,10 @@ const MySubGreddiiitPage = () => {
                         
                     }
                     )
+                    if(response.data.result.moderator !== response.data.logged_in)
+                    {
+                        navigate('/mySubGreddiiits')
+                    }
                     setReports(rep.data.reports)
                     setAllUsers(response_.data.user)
                     setFollowersData(x.data.followers);
