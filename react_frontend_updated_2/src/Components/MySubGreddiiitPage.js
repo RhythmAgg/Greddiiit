@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useState, useEffect, useRef } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from '../api/axios'
@@ -100,8 +100,12 @@ const MySubGreddiiitPage = () => {
                         return (((response.data.result).requests).includes(element.userName))
                     }))
                     console.log('welcome')
+                    document.addEventListener('keydown',handleKeyPress)
                     setAuth(response.data.logged_in);
                     setLoader('done')
+                    return () => {
+                        document.removeEventListener('keydown',handleKeyPress)
+                    }
                     }catch(err){
                         console.log(err)
                     }
@@ -119,6 +123,19 @@ const MySubGreddiiitPage = () => {
         localStorage.removeItem('token');
         navigate('/home')
     }
+
+    const handleKeyPress = useCallback((e) => {
+        if(e.key === 'j'){
+            setNav('Join')
+        }else if(e.key === 'r'){
+            setNav('reports')
+        }else if(e.key === 's'){
+            setNav('stats')
+        }else if(e.key === 'u'){
+            setNav('users')
+        }
+    },[]) 
+
   return ( 
     (loader && auth)?(
         <div className='row gx-0 '>

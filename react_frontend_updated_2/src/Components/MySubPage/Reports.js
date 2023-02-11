@@ -8,6 +8,33 @@ const Reports = ({reports,setReports,subdetails,setSubDetails}) => {
     const [ignore,setIgnore] = useState('')
     let count = 0
 
+    let map={};
+    const interval_start = (item) => {
+        document.getElementById(item._id).innerHTML = `Cancel in 3`
+        let cou = 2
+        map['interval_id'] = setInterval(() => {
+            if(cou ===0)
+            {
+                handleBlock(item)
+                document.getElementById(item._id).innerHTML = `Block User`
+            }
+            else{
+                document.getElementById(item._id).innerHTML = `Cancel in ${cou}`
+                cou--;
+            }
+        },1000)
+        console.log(map['interval_id'])
+    }
+
+    const interval_end = (item) => {
+        console.log(map['interval_id'])
+        clearInterval(map['interval_id'])
+        document.getElementById(item._id).innerHTML = `Block User`
+        map = {}
+
+    }
+
+
     const handleIgnore = async (item) => {
         setIgnore(`${item._id}`)
         const info = JSON.parse(localStorage.getItem('token'));
@@ -25,6 +52,8 @@ const Reports = ({reports,setReports,subdetails,setSubDetails}) => {
         );
     }
     const handleBlock = async (item) => {
+        clearInterval(map['interval_id'])
+        map={}
         const info = JSON.parse(localStorage.getItem('token'));
         const deleteReport = await axios.delete('/mySubGreddiiit/blockUser',
             {
@@ -107,8 +136,8 @@ const Reports = ({reports,setReports,subdetails,setSubDetails}) => {
             </div>
             <div className='d-flex flex-wrap justify-content-center'>
                 <button type='button' className="btn btn-transparent bg-success m-1" style={{'padding': '5px'}}
-                disabled={ignore === `${item._id}` ? "disabled":""}
-                onClick={() => handleBlock(item)}
+                disabled={ignore === `${item._id}` ? "disabled":""} id={item._id}
+                onClick={() => !map['interval_id']?interval_start(item):interval_end(item)}
                 >Block User
                 </button>
                 <button type='button' className="btn btn-transparent bg-danger m-1" style={{'padding': '5px'}}

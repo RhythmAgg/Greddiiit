@@ -221,7 +221,7 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
                                     <button type='button' className='btn btn-danger '
                                     data-bs-toggle='modal' data-bs-target='#myModal_report'
                                     onClick={() => setPostReport(item)}
-                                    disabled={item.posted_by === auth || item.posted_by === subdetails.moderator?"disabled":""}
+                                    disabled={item.posted_by === auth || item.posted_by === subdetails.moderator || subdetails.blocked.includes(item.posted_by)?"disabled":""}
                                     >Report
                                     </button>
                                     <button type='button' className='btn btn-info '

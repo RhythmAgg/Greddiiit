@@ -13,6 +13,7 @@ import ModalFollowing from './ModalFollowing';
 import AccordionAllSub from './AccordionAllSub';
 import UserOffcanvas from './UserOffcanvas';
 import Footer from './Footer';
+import Fuse from 'fuse.js';
 
 const AllSubGreddiiits = () => {
     const [auth,setAuth] = useState({});
@@ -119,6 +120,19 @@ const AllSubGreddiiits = () => {
             console.log(x)
             console.log(y)
             return [...x,...y]
+    }
+
+    const fuseSearch = (sortJoined,search) => {
+        let temp = []
+        const options = {
+            keys: ['name']
+        }
+        const fuse = new Fuse(sortJoined,options)
+        const x = fuse.search(search)
+        x.forEach(it => {
+            temp.push(it.item)
+        })
+        return temp;
     }
     
     const logout = (e) => {
@@ -260,7 +274,7 @@ const AllSubGreddiiits = () => {
                     {allSubGreddiiits && <div id="accordion">
                         <AccordionAllSub
                             data={search?(
-                                    sortJoined().filter(item => ((item.name).toLowerCase()).includes(search.toLowerCase()))
+                                    fuseSearch(sortJoined(),search)
                                     ):sortJoined()
                                 }  
                             allSubGreddiiits={allSubGreddiiits} 
