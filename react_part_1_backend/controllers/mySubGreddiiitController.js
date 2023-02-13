@@ -5,6 +5,8 @@ const Followers_Following = require('../models/FollowersFollowing')
 const Report = require('../models/Report')
 const Post = require('../models/Post')
 
+var nodemailer = require('nodemailer')
+
 
 
 // @desc Create new user
@@ -134,12 +136,37 @@ const getReports = async (req,res) => {
 
 }
 const deleteReport = async (req,res) => {
+    console.log('uess')
     const logged_id = req.user_id
 
     const result = await Report.deleteOne({'_id': req.body.delete_report_id}).lean().exec()
 
+    const user = await User.findOne({'userName': req.body.reported_by}).lean().exec()
+
     console.log(result)
 
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'gokum1037@gmail.com',
+          pass: 'hijrjjmoyesaknrt'
+        }
+      });
+      
+      var mailOptions = {
+        from: 'gokum1037@gmail.com',
+        to: user.email,
+        subject: 'Report Ignored',
+        text: `report with id: ${req.body.delete_report_id} ignored`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
     res.json({result,'logged_in': req.userName})
     
 }
@@ -154,7 +181,33 @@ const deleteReportPost = async (req,res) => {
     const result___ = await SubGreddiiits.findOneAndUpdate({'name': req.body.sub_posted_in},
     {$inc : {deletedpost_count: 1}},{new:true,upsert:true}).lean().exec()
 
+    const user = await User.findOne({'userName': req.body.reported_by}).lean().exec()
+    const user1 = await User.findOne({'userName': req.body.reported_user}).lean().exec()
+
     console.log(result)
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'gokum1037@gmail.com',
+          pass: 'hijrjjmoyesaknrt'
+        }
+      });
+      
+      var mailOptions = {
+        from: 'gokum1037@gmail.com',
+        to: `${user.email},${user1.email}`,
+        subject: 'Report - Post deleted',
+        text: `report with id: ${req.body.delete_report_id} post deleted`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
 
     res.json({result,'logged_in': req.userName})   
 }

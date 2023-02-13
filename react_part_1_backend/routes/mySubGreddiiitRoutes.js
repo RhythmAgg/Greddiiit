@@ -19,6 +19,9 @@ router.route('/reject')
 router.route('/getReports')
     .get(mySubGreddiiitController.getReports)
 
+router.route('/deleteReport')
+    .delete(mySubGreddiiitController.deleteReport)
+
 router.route('/deleteReportPost')
     .delete(mySubGreddiiitController.deleteReportPost)
 

@@ -45,7 +45,8 @@ const Reports = ({reports,setReports,subdetails,setSubDetails}) => {
                     "Content-type": "application/json"
                 },
                 data: {
-                    'delete_report_id': item._id
+                    'delete_report_id': item._id,
+                    'reported_by': item.reported_by
                 },
                 withCredentials: true
             }
@@ -89,7 +90,9 @@ const Reports = ({reports,setReports,subdetails,setSubDetails}) => {
                 data: {
                     'delete_report_id': item._id,
                     'delete_post_id': item.reported_post,
-                    'sub_posted_in': item.reported_sub
+                    'sub_posted_in': item.reported_sub,
+                    'reported_by': item.reported_by,
+                    'reported_user': item.reported_user
                 },
                 withCredentials: true
             }

@@ -22,6 +22,11 @@ const reportSchema = new mongoose.Schema({
     },
     reportText: {
         type: String,
+    },
+    expiresAt: {
+        type: Date,
+        default: Date.now,
+        expires: 864000
     }
 },{
     timestamps: true
