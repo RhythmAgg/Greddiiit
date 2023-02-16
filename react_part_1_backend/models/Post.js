@@ -28,7 +28,13 @@ const postSchema = new mongoose.Schema({
         },
         commentor: {
             type: String
-        }
+        },
+        parent: {
+            type: mongoose.Schema.Types.ObjectId,
+        },
+        childcomments: [{
+            type: mongoose.Schema.Types.ObjectId
+        }]
     }]
 },{
     timestamps: true

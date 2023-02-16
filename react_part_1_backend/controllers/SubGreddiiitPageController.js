@@ -21,12 +21,29 @@ const addComment = async (req,res) => {
 
 
     const result = await Post.findOneAndUpdate({'_id': post_id},
-                    {$push : {comments: {content: req.body.content,commentor: logged_in}}},{new: true}).lean().exec()
+                    {$push : {comments: {content: req.body.content,commentor: logged_in,parent: post_id,childcomments: []}}},{new: true}).lean().exec()
     
     console.log(result)
     
     res.json(result)
 
+}
+const addReply = async (req,res) => {
+    const logged_in = req.userName
+
+    const post_id = req.body.post_id
+
+    const parent = req.body.parentcomment
+
+    const result = await Post.findOneAndUpdate({'_id': post_id},
+                    {$push : {comments: {content: req.body.reply,commentor: logged_in,parent: parent,childcomments: []}}},{new: true}).lean().exec()
+
+    const result_ = await Post.findOneAndUpdate({'_id': post_id,'comments': {$elemMatch: {'_id': parent}}},
+                    {$push: {'comments.$.childcomments': result.comments[result.comments.length - 1]._id}},{new: true}).lean().exec()
+    
+    console.log(result_)
+    
+    res.json(result_)
 }
 
 const savepost = async (req,res) => {
@@ -113,5 +130,6 @@ module.exports = {
     upvote,
     unsavepost,
     report,
-    savepost
+    savepost,
+    addReply
 }

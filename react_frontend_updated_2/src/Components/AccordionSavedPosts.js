@@ -6,6 +6,7 @@ import axios from '../api/axios'
 import { Link, Navigate } from 'react-router-dom'
 import Missing from './Missing'
 import Comments from './Comments'
+import CommentsSaved from './CommentsSaved'
 
 const AccordionSavedPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfileView,profileView,auth,setAllPosts,allPosts}) => {
     const [items,setItems] = useState([])
@@ -39,11 +40,14 @@ const AccordionSavedPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfi
                     }
                 }
                 )
+                const temp = response.data.comments
+                temp.reverse()
+                console.log(temp)
                 setAllPosts(allPosts.map(pst => {
                     var value = {...pst}
                     if(pst._id === post._id )
                     {
-                        value.comments.push({'content': mycomment,'commentor': auth})
+                        value.comments.push({'content': mycomment,'commentor': auth,'parent': post._id,'childcomments': [],'_id': temp[0]._id})
                         return value
                     }else return value
                 }))
@@ -224,20 +228,20 @@ const AccordionSavedPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfi
                     </div>
                     <div id={x} className="collapse" data-bs-parent="#accordion">
                         <div className="card-body " style={{'color': 'white','maxHeight': '50vh','overflowY': 'scroll'}}>
-                            <div className='d-flex mb-1'> 
-                                <input type='text' className='p-1 flex-fill me-1' placeholder='Add Comment'
-                                    value={mycomment} onChange={(e) => setMyComment(e.target.value)} 
-                                ></input>
-                                <button type='button' className='btn btn-primary'
-                                    onClick={(e) => addComment(item)}
-                                >Add</button>
-                            </div>
+                           
                             
                             <div className='bg-secondary rounded'>
                                 <ul className="list-group users_group list-group-flush">
                                 {item.comments.length > 0?
-                                <Comments
-                                comments={[...item.comments].reverse()}
+                                <CommentsSaved
+                                comments={[...item.comments].reverse().filter(cmt => cmt.parent === item._id)}
+                                allcomments={[...item.comments]}
+                                level={0}
+                                parent={{}}
+                                post={item}
+                                allPosts={allPosts}
+                                setAllPosts={setAllPosts}
+                                auth={auth}
                                 />
                                 :<li className="list-group-item comment_list bg-transparent d-flex justify-content-center"
                                 ><p style={{'color': 'white'}}>No Comment</p></li>

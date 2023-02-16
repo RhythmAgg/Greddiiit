@@ -39,11 +39,14 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
                     }
                 }
                 )
+                const temp = response.data.comments
+                temp.reverse()
+                console.log(temp)
                 setAllPosts(allPosts.map(pst => {
                     var value = {...pst}
                     if(pst._id === post._id )
                     {
-                        value.comments.push({'content': mycomment,'commentor': auth})
+                        value.comments.push({'content': mycomment,'commentor': auth,'parent': post._id,'childcomments': [],'_id': temp[0]._id})
                         return value
                     }else return value
                 }))
@@ -249,7 +252,14 @@ const AccordionSubPosts = ({data,allSubGreddiiits,setAllSubGreddiiits,setProfile
                                 <ul className="list-group users_group list-group-flush">
                                 {item.comments.length > 0?
                                 <Comments
-                                comments={[...item.comments].reverse()}
+                                comments={[...item.comments].reverse().filter(cmt => cmt.parent === item._id)}
+                                allcomments={[...item.comments]}
+                                level={0}
+                                parent={{}}
+                                post={item}
+                                allPosts={allPosts}
+                                setAllPosts={setAllPosts}
+                                auth={auth}
                                 />
                                 :<li className="list-group-item comment_list bg-transparent d-flex justify-content-center"
                                 ><p style={{'color': 'white'}}>No Comment</p></li>

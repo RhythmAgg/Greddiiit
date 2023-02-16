@@ -11,6 +11,9 @@ router.route('/report')
 router.route('/addComment')
     .post(SubGreddiiitPageController.addComment)
 
+router.route('/addReply')
+    .post(SubGreddiiitPageController.addReply)
+
 router.route('/upvote')
     .patch(SubGreddiiitPageController.upvote)
 

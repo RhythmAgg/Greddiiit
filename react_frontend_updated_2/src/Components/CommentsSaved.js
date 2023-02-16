@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReddit } from '@fortawesome/free-brands-svg-icons'
 import { faEdit,faSignOut, faUser,faAnglesRight } from '@fortawesome/free-solid-svg-icons'
 import axios from '../api/axios'
-const Comments = ({comments,level,parent,post,allcomments,allPosts,setAllPosts,auth}) => {
+const CommentsSaved = ({comments,level,parent,post,allcomments,allPosts,setAllPosts,auth}) => {
     const [items,setItems] = useState([])
     const [reply,setReply] = useState('')
 
@@ -60,19 +60,6 @@ const Comments = ({comments,level,parent,post,allcomments,allPosts,setAllPosts,a
     let count = 0
   return (
         <>
-            {level > 0
-            ?(
-                <div className='d-flex mb-1'> 
-                    <input type='text' className='p-1 flex-fill' placeholder='Reply'
-                        value={reply} onChange={(e) => setReply(e.target.value)} 
-                    ></input>
-                    <button type='button' className='btn btn-primary'
-                        onClick={(e) => addReply()}
-                    >Reply</button>
-                </div>
-            )
-            :   <div></div>
-            }
             {items.length > 0
             ?   
             items.map(item => {
@@ -91,7 +78,7 @@ const Comments = ({comments,level,parent,post,allcomments,allPosts,setAllPosts,a
                                 <div className='collapse' id={divid}>
                                 {item.childcomments.length >0
                                 ?
-                                <Comments 
+                                <CommentsSaved
                                 comments={(allcomments.filter(cmt => item.childcomments.includes(cmt._id))).reverse()}
                                 level={level+1}
                                 allcomments={allcomments}
@@ -102,7 +89,7 @@ const Comments = ({comments,level,parent,post,allcomments,allPosts,setAllPosts,a
                                 auth={auth}
                                 />
                                 :
-                                <Comments 
+                                <CommentsSaved
                                 comments={[]}
                                 allcomments={allcomments}
                                 level={level+1}
@@ -134,4 +121,4 @@ const Comments = ({comments,level,parent,post,allcomments,allPosts,setAllPosts,a
   )
 }
 
-export default Comments
+export default CommentsSaved
