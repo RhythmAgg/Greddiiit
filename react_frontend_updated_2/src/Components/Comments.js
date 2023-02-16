@@ -87,7 +87,7 @@ const Comments = ({comments,level,parent,post,allcomments,allPosts,setAllPosts,a
                             <div className='flex-fill d-flex flex-column' style={{'color': 'white'}}>
                                 <p className='mb-0' style={{'fontSize': '0.8rem','color': 'whitesmoke'}}>{item.commentor}</p>
                                 <p className='flex-fill mb-0' style={{'fontSize': '1.2rem','wordBreak': 'break-word'}}>{item.content}</p>
-                                <span style={{'fontSize': '.7rem','color': 'lightblue'}} data-bs-toggle="collapse" data-bs-target={`#${divid}`}>Replies<span>({item.childcomments.length})</span></span>
+                                <span style={{'fontSize': '.7rem','color': 'lightblue','cursor': 'pointer'}} data-bs-toggle="collapse" data-bs-target={`#${divid}`}>Replies<span>({item.childcomments.length})</span></span>
                                 <div className='collapse' id={divid}>
                                 {item.childcomments.length >0
                                 ?
