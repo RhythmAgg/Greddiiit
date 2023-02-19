@@ -84,11 +84,13 @@ const getUser = (userName) => {
     //send and get message
     socket.on("sendMessage", ({ senderName, receiverName, text, creation_time }) => {
     const user = getUser(receiverName);
-    io.to(user.socketId).emit("getMessage", {
-        senderName,
-        text,
-        creation_time
-    });
+    if(user){
+        io.to(user.socketId).emit("getMessage", {
+            senderName,
+            text,
+            creation_time
+        });
+    }
     });
 
     //when disconnect
