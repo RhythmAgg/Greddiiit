@@ -9,6 +9,7 @@ import MySubGreddiiitPage from './Components/MySubGreddiiitPage';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import SavedPosts from './Components/SavedPosts';
+import ChatRoom from './Components/ChatRoom';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='SubGreddiiitPage/:sub/:logged_in' element={<SubGreddiiitPage />} />
         <Route path='MySubGreddiiitPage/:sub/:logged_in' element={<MySubGreddiiitPage />} />
         <Route path='SavedPosts' element={<SavedPosts />} />
+        <Route path='ChatRoom' element={<ChatRoom />} />
         <Route path="*" element={<Missing />} />
       </Route>
     </Routes>

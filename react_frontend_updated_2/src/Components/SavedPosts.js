@@ -138,6 +138,9 @@ const SavedPosts = () => {
                         <li className="nav-item">
                         <Link className="nav-link active" to="/SavedPosts">Saved Posts</Link>
                         </li>
+                        <li className="nav-item">
+                        <Link className="nav-link" to="/ChatRoom">Chat Room</Link>
+                        </li>
                         </ul>
                         <div className='d-flex justify-content-end' style={{'flexGrow': '1','color': 'white'}}>
                         <FontAwesomeIcon icon={faSignOut} size='2x' style={{'cursor': 'pointer'}} 

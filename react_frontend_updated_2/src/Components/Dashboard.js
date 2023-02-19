@@ -28,11 +28,13 @@ const Dashboard = () => {
     const [loader,setLoader] = useState(null)
     const navigate = useNavigate()
 
+    
     useEffect(() => {
         (async () => {
             window.scrollTo(0,0)
             document.querySelector("html").style.height = '100vh';
             document.querySelector("body").style.height = '100vh';
+            // document.querySelector("body").setAttribute('onbeforeunload','handleback(event)')
             const info = JSON.parse(localStorage.getItem('token'));
             if(info && info.accessToken)
             {
@@ -122,6 +124,9 @@ const Dashboard = () => {
                         </li>
                         <li className="nav-item">
                         <Link className="nav-link" to="/SavedPosts">Saved Posts</Link>
+                        </li>
+                        <li className="nav-item">
+                        <Link className="nav-link" to="/ChatRoom">Chat Room</Link>
                         </li>
                         </ul>
                         <div className='d-flex justify-content-end' style={{'flexGrow': '1','color': 'white'}}>

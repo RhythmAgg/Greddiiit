@@ -12,4 +12,6 @@ router.route('/')
 router.route('/savedposts')
     .get(userController.savedposts)
 
+router.route('/friends')
+    .get(userController.getFriends)
 module.exports = router

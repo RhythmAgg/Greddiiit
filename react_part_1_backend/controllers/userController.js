@@ -1,5 +1,7 @@
 const User = require('../models/User')
 const Post = require('../models/Post')
+const Followers_Following = require('../models/FollowersFollowing')
+
 const bcrypt = require('bcrypt')
 
 
@@ -19,6 +21,27 @@ const getUserInfo = async (req, res) => {
 
     // res.status(201).json({"userName": "ok"});
 }
+
+const getFriends = async (req, res) => {
+
+    const user_id= req.user_id;
+    const userName = req.userName
+
+    // console.log(userName);
+
+    const user = await Followers_Following.findOne({'user': user_id}).lean().exec();
+    console.log(user);
+    const friend = user.followers.filter(follower => {
+        return user.following.some(x => x.name === follower.name) && follower.name !== req.userName
+    })
+    console.log(friend)
+    const res_obj = {friend,'logged_in': req.userName}
+    res.json(res_obj);
+
+    // res.status(201).json({"userName": "ok"});
+}
+
+
 
 const savedposts = async (req,res) => {
     const userName = req.userName
@@ -81,6 +104,7 @@ const editUserInfo = async (req, res) => {
 
 module.exports = {
     getUserInfo,
+    getFriends,
     editUserInfo,
     savedposts
 }
