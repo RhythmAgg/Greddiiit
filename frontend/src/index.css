@@ -1,0 +1,320 @@
+*,::after,::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html,body {
+  scroll-behavior: smooth;
+}
+
+.contain {
+  /* min-height: 100vh; */
+
+  height: 100%;
+  position: relative;
+}
+.orange {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(255, 89, 0);
+  height: 100%;
+  width: 100%;
+}
+.Black {
+  position: absolute;
+  /* z-index: 1; */
+  top: 0;
+  right: 0;
+  background-color: rgb(29, 27, 27);
+  height: 100%;
+  width: 100%;
+  animation: moveClipping 0.7s forwards;
+  animation-timing-function: ease-in;
+  animation-delay: -0.1s;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%,0% 0%);
+}
+.circle_in_between {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 20vw;
+  min-width: 150px;
+  min-height: 150px;
+  height: 20vw;
+  clip-path: circle(50%);
+  background-color: yellow;
+  z-index: 1;
+  animation: comeForward 1s forwards;
+  animation-timing-function: ease-in;
+}
+@keyframes comeForward {
+  from{
+    opacity: 0;
+    /* transform: translate(-50%,-50%); */
+  }
+  to {
+    opacity: 1;
+    /* transform: rotate(360deg); */
+    /* transform: translate(-50%,-50%); */
+
+     
+  }
+  
+}
+
+@keyframes moveClipping {
+  0% {
+      clip-path: polygon(0% 0%, 100% 0%, 100% 100%,0% 0%);
+  }
+  1% {
+      clip-path: polygon(0% 2%, 0% 0%, 100% 0%,100% 98%,0% 2%);
+  }
+  100% {
+      clip-path: polygon(0% 50%, 0% 0%, 100% 0%,100% 50%,0% 50%);
+  }
+  
+}
+
+.Home {
+  /* background-image: url('./img/reddit_logo.jpg');
+  min-height: 100vh;
+  background-position: center center;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-size: cover; */
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* filter: blur(8px); */
+  /* -webkit-filter: blur(8px); */ 
+}
+
+.flex-login-register {
+  /* flex-grow: 1; */
+  display: flex;
+  flex-direction: column;
+  /* height: 100%; */
+  /* justify-content: center; */
+  align-content: center;
+  flex-wrap: wrap;
+  row-gap: 10vh;
+  animation: comeForward 1s forwards;
+  animation-timing-function: ease-in;
+}
+.Login,.Register{
+  margin: 2rem;
+  min-width: 40vw;
+}
+/* .Login:hover,.Register:hover {
+  transform: scale(1.1);
+  transition: all .5s;
+
+} */
+
+
+@media screen and (max-width: 870px) {
+  .flex-login-register {
+    flex-direction: column;
+  } 
+
+}
+.card-logo {
+  width: 100%;
+}
+.card-body {
+  width: 100%;
+}
+
+footer {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  /* border: 1px solid black; */
+  bottom: 0rem;
+  animation: showUp 0.5s ease-in-out forwards;
+  /* background-color: white; */
+  color: aliceblue;
+  
+}
+.heart {
+  color: pink;
+  animation: heartBlink 1s ease-out infinite;
+  animation-delay: 1s;
+}
+@keyframes showUp {
+  100% {
+      bottom: 0.5rem;
+  }
+}
+@keyframes heartBlink {
+  50% {
+      font-size: 1.3rem;
+      color: red;
+  }
+  100%{
+      font-size: 1rem;
+      color: pink;
+  }
+}
+.footer p{
+  margin-top: 1rem;
+}
+
+.header-dashboard {
+  background-image: linear-gradient(rgba(255, 157, 0, 0.909),rgb(255, 119, 0));
+}
+.modal-backdrop {
+  z-index: 2;
+}
+.all_users {
+  background-image: url('./img/user_1.png');
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.users_group > list-group-item {  
+  background-color: transparent;
+}
+.user_button, .leave_button, .unsave_button{
+  border: 2px solid black;
+}
+.unsave_button:hover {
+  background-color: rgb(232, 10, 10);
+  color: white;
+  border: none;
+}
+
+.user_button:hover ,.follow_button:hover{
+  background-color: rgb(50, 159, 20);
+  color: white;
+  border: none;
+}
+.leave_button:hover {
+  background-color: rgb(240, 93, 13);
+  color: white;
+  border: none;
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.do-flip{
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.flip-card-front {
+  background-color: lightblue;
+  color: black;
+}
+
+.flip-card-back {
+  background-color: white;
+  transform: rotateY(180deg);
+}
+
+.tt {
+  background-image: linear-gradient(rgb(22, 243, 155),rgb(227, 212, 148),rgb(101, 234, 136));
+}
+
+
+
+
+.comment_list {
+  border-bottom:1px solid black;
+}
+
+.reports-container {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 30px;
+  text-align: center;
+ 
+}
+
+.flex-item-left {
+  background-color: #f1f1f1;
+  padding: 10px;
+  flex: 45%;
+  margin: 1rem;
+  min-height: 40vh;
+
+}
+
+@media (max-width: 800px) {
+  .flex-item-left {
+    flex: 100%;
+  }
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.messageTop{
+    display: flex;
+}
+
+.messageImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.messageText{
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgb(245, 241, 241);
+    color: black;
+    max-width: 300px;
+}
+
+.messageBottom{
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.message.own{
+    align-items: flex-end;
+}
+
+.message.own .messageText{
+    background-color: rgb(52, 238, 95);
+    color: black;
+}
